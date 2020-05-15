@@ -106,31 +106,45 @@ end
 class CodeMaker < Mastermind
   include RandomColor
 
-  def computer_guess
-    [RandomColor.random_color,RandomColor.random_color,RandomColor.random_color,RandomColor.random_color]
-  end
+  def computer_guess(round,imperfect_matches,perfect_matches,guess)
+    if round == 0 
+      return [RandomColor.random_color,RandomColor.random_color,RandomColor.random_color,RandomColor.random_color]
+    else ai(imperfect_matches,perfect_matches,guess)
+    end  
+ end
   
+  def ai(imperfect_matches,perfect_matches,guess)
+    n = imperfect_matches + perfect_matches
+    i = 0
+    (4-n).times do |i|
+      guess[i] = RandomColor.random_color
+      i += 1
+    end
+    return guess
+    # guess.randomize(4-n) need a function to randomize 4-n of the items in the array guess
+  end
+
   def game(code)
     perfect_matches = 0
     imperfect_matches = 0
     round = 0
+    guess = ["","","",""]
 
-    while round <= 12 && perfect_matches <= 4 do
+    while round <= 100 && perfect_matches <= 4 do
       break if perfect_matches == 4
-      guess = computer_guess
+      guess = computer_guess(round,imperfect_matches,perfect_matches,guess)
       perfect_matches = check_perfect_matches(guess,code)
       imperfect_matches = check_imperfect_matches(guess,code) - perfect_matches # don't double count perfect matches
       round += 1
-      show_guess_result(perfect_matches, imperfect_matches, round)
+      show_guess_result(perfect_matches, imperfect_matches, round, guess)
     end
   end   
-  
-  
-  def show_guess_result(perfect_matches, imperfect_matches, round) # will need one for each
+    
+  def show_guess_result(perfect_matches, imperfect_matches, round, guess) # will need one for each
     if imperfect_matches == 0 && perfect_matches == 0
-      puts "Round #{round}: The computer got no matches"
+      puts "Round #{round}: The computer guessed #{guess} got no matches"
     elsif perfect_matches > 0 && perfect_matches < 4
-      puts "Round #{round}: The computer guessed #{perfect_matches} perfect matches and #{imperfect_matches} imperfect matches"
+      puts "Round #{round}: The computer guessed #{guess} #{perfect_matches} perfect matches and #{imperfect_matches} imperfect matches"
     elsif perfect_matches == 4
       puts "Round #{round}: The computer cracked the code!"
     else
