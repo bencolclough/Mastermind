@@ -1,25 +1,13 @@
-def random_color
-  number = rand(5)
-  case number
-  when 0
-    "red"      
-  when 1
-    "blue"
-  when 2
-    "green"
-  when 3
-    "yellow"
-  when 4
-    "pink"
-  when 5
-    "orange"
-  else 
-      "Error, incorrect random number generated"
-  end
+b = 12
+a = 6
+c = 0
+
+def add(a,b)
+  c = a + b
+  p c
 end
 
-def set_random_code
-  code = [random_color,random_color,random_color,random_color,random_color]
-end
+p add(a,b)
 
-p set_random_code
+
+
